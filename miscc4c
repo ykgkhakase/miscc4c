@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+script_path="$(readlink -f "${BASH_SOURCE[0]}")"
+script_dir="$(cd "$(dirname "${script_path}")" && pwd)"
+project_root="${MISCC4C_PROJECT_ROOT:-${script_dir}}"
+python_bin="${project_root}/.venv/bin/python"
+
+if [[ ! -x "${python_bin}" ]]; then
+  echo "ERROR: project venv python not found or not executable: ${python_bin}" >&2
+  echo "Hint: set MISCC4C_PROJECT_ROOT or create venv at ${project_root}/.venv" >&2
+  exit 1
+fi
+
+exec "${python_bin}" -m miscc4c "$@"
